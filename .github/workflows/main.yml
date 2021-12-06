@@ -7,5 +7,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: action
-        uses: ./action.yml
+        uses: ./
       - run: echo Previous result ${{ steps.action.outputs.result }}
