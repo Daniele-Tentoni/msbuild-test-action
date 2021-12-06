@@ -16,3 +16,4 @@ runs:
       run: |
         echo "Hello World"
         echo "::set-output name=result::0"
+      shell: pwsh
