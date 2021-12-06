@@ -21,11 +21,24 @@ runs:
   steps:
     - name: Restore Nuget Packages
       id: nuget-restore
-      if: ${{ inputs.solution != '#' }}
       run: |
-        echo "Restoring Nuget Packages for ${{ inputs.solution }} solution"
-        $(nuget restore ${{ inputs.solution }})
-        echo "::set-output name=restored::$?"
+        if ( ${{ inputs.solution != '#' }} )
+        {
+          echo "Restoring Nuget Packages for ${{ inputs.solution }} solution"
+          $(nuget restore ${{ inputs.solution }})
+          if ( $? )
+          {
+            echo "::set-output name=restored::true"
+          }
+          else
+          {
+            echo "::set-output name=restored::false"
+          }
+        }
+        else
+        {
+          echo "::set-output name=restored::false"
+        }
       shell: pwsh
 
     - id: run-tests
