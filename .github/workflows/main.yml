@@ -1,0 +1,11 @@
+name: Internal action test
+on: [push]
+jobs:
+  test:
+    runs-on: windows-latest
+    name: Try to use my action
+    steps:
+      - uses: actions/checkout@v2
+      - id: action
+        uses: ./action.yml
+      - run: echo Previous result ${{ steps.action.outputs.result }}

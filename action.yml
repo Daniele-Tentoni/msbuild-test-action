@@ -1,0 +1,18 @@
+name: "MSBuild Test Action"
+author: "Daniele Tentoni"
+branding:
+  icon: "sun"
+  color: "green"
+description: "Run a test command using MSBuild and create test result artifacts."
+inputs:
+outputs:
+  result:
+    description: "Result of the action."
+    value: ${{ steps.run-tests.outputs.result }}
+runs:
+  using: "composite"
+  steps:
+    - id: run-tests
+      run: |
+        echo "Hello World"
+        echo "::set-output name=result::0"
