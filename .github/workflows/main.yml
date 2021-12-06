@@ -8,4 +8,6 @@ jobs:
       - uses: actions/checkout@v2
       - id: action
         uses: ./
-      - run: echo Previous result ${{ steps.action.outputs.result }}
+      - run: |
+          echo Previous nuget-packages-restored: ${{ steps.action.outputs.restored }}
+          echo Previous result ${{ steps.action.outputs.result }}

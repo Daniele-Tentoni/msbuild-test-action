@@ -5,17 +5,29 @@ branding:
   color: "green"
 description: "Run a test command using MSBuild and create test result artifacts."
 inputs:
-  example:
-    description: "Input example"
-    default: false
+  solution:
+    description: "Solution name"
+    default: "#"
     required: false
 outputs:
+  nuget-packages-restored:
+    description: "True if nuget packages was been restored"
+    value: ${{ steps.nuget-restore.outputs.restored }}
   result:
     description: "Result of the action."
     value: ${{ steps.run-tests.outputs.result }}
 runs:
   using: "composite"
   steps:
+    - name: Restore Nuget Packages
+      id: nuget-restore
+      if: ${{ inputs.solution != '#' }}
+      run: |
+        echo "Restoring Nuget Packages for ${{ inputs.solution }} solution"
+        $(nuget restore ${{ inputs.solution }})
+        echo "::set-output name=restored::$?"
+      shell: pwsh
+
     - id: run-tests
       run: |
         echo "Hello World"
