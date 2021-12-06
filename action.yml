@@ -5,6 +5,10 @@ branding:
   color: "green"
 description: "Run a test command using MSBuild and create test result artifacts."
 inputs:
+  example:
+    description: "Input example"
+    default: false
+    required: false
 outputs:
   result:
     description: "Result of the action."
