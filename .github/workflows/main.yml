@@ -9,5 +9,6 @@ jobs:
       - id: action
         uses: ./
       - run: |
-          echo Previous nuget-packages-restored: ${{ steps.action.outputs.restored }}
+          echo Previous nuget-packages-restored: ${{ steps.action.outputs.nuget-packages-restored }}
+          echo Previous compilation result: ${{ steps.action.outputs.test-project-compiled}}
           echo Previous result ${{ steps.action.outputs.result }}

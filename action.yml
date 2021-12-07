@@ -9,10 +9,17 @@ inputs:
     description: "Solution name"
     default: "#"
     required: false
+  project:
+    description: "Project name"
+    default: "#"
+    required: false
 outputs:
   nuget-packages-restored:
     description: "True if nuget packages was been restored"
     value: ${{ steps.nuget-restore.outputs.restored }}
+  test-project-compiled:
+    description: "True if the compilation ran and succeded, false if compilation failed or wasn't ran"
+    value: ${{ steps.test-compilation.outputs.compiled }}
   result:
     description: "Result of the action."
     value: ${{ steps.run-tests.outputs.result }}
@@ -25,7 +32,7 @@ runs:
         if ( ${{ inputs.solution != '#' }} )
         {
           echo "Restoring Nuget Packages for ${{ inputs.solution }} solution"
-          $(nuget restore ${{ inputs.solution }})
+          $( nuget restore ${{ inputs.solution }} )
           if ( $? )
           {
             echo "::set-output name=restored::true"
@@ -40,6 +47,28 @@ runs:
           echo "::set-output name=restored::false"
         }
       shell: pwsh
+
+    - name: Build Test project
+      id: test-compilation
+      run: |
+        if ( ${{ inputs.solution != '#' }} )
+        {
+          echo "Compiling tests for ${{ inputs.project }}"
+          $( msbuild UnipiAuthenticationPlugin.Core.Tests\UnipiAuthenticationPlugin.Core.Tests.csproj -t:rebuild -property:Configuration=Release )
+          if ( $? )
+          {
+            echo "::set-output name=compiled::true"
+          }
+          else
+          {
+            echo "::set-output name=compiled::false"
+          }
+        }
+        else
+        {
+          echo "::set-output name=compiled::false"
+        }
+      shell: pswh
 
     - id: run-tests
       run: |
